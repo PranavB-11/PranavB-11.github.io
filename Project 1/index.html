@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 1 - Prokudin-Gorskii Image Alignment</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="../index.html" class="back-arrow">&larr;</a></li>
+            <li><a href="../Project 0/index.html" class="project-link">Project 0</a></li>
+            <li><a href="index.html" class="project-link active">Project 1</a></li>
+        </ul>
+    </nav>
+
+    <div class="main-container" style="padding-top: 80px; padding-bottom: 10px;">
+        <h1 style="font-size: 3.5rem;">Prokudin-Gorskii Image Alignment</h1>
+    </div>
+
+    <div class="project-content" style="padding-top: 20px;">
+        <h2>Overview</h2>
+        <div style="max-width: 960px; margin: 0 auto 40px auto; text-align: left; line-height: 1.6;">
+            <p>
+                This project reconstructs full-color photographs from digitized glass plate negatives of Prokudin-Gorskii. Each digitized plate is a single grayscale image containing three vertically stacked records of the same scene in the order: B, G, and R. At a high-level, we slice these images to isolate B, G, and R images, align them with high precision, and combine them for a full-color photo.
+            </p>
+            <p>
+                My approach uses Normalized Cross-Correlation (NCC) as the alignment metric, particularly because it's robust to variations in brightness and contrast that exist between the color channels. It measure structural similarity, independent of their brightness. A higher NCC score indicates better alignment. Then, using an image pyramid search, we find the optimal alignment for the original full-resolution image. For each image we output the optimal displacement vectors for the green and red channels which are used to shift into alignment and stacked with the blue channel for the final output.
+            </p>
+            <p>
+                For the emir.tif image, using the above approach resulted in a blurry head, probably due to misleading by large areas of saturated color (like his robe). So, my solution to this was using alignment based on Canny edges, which matches structural outlines rather than colors.
+            </p>
+        </div>
+
+        <h2>Gallery</h2>
+        <div class="results-grid" id="results-grid">
+        </div>
+    </div>
+
+    <script src="results.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const resultsGrid = document.getElementById('results-grid');
+            let cardsHtml = '';
+            for (const filename in resultsData) {
+                const result = resultsData[filename];
+                const originalName = result.original_name;
+                const gDisp = result.g_disp; 
+                const rDisp = result.r_disp;
+                const imagePath = `output_images/${filename}`;
+
+                cardsHtml += `
+                    <div class="result-card">
+                        <img src="${imagePath}" alt="Aligned image of ${originalName}">
+                        <div class="result-card-info">
+                            <h3>${originalName}</h3>
+                            <p><span class="label">Green Disp (y, x):</span> (${gDisp[0]}, ${gDisp[1]})</p>
+                            <p><span class="label">Red Disp (y, x):</span> (${rDisp[0]}, ${rDisp[1]})</p>
+                        </div>
+                    </div>`;
+            }
+            resultsGrid.innerHTML = cardsHtml;
+        });
+    </script>
+
+</body>
+</html>
+

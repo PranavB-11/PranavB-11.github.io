@@ -1,0 +1,50 @@
+.results-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    padding-top: 20px;
+}
+
+.result-card {
+    flex: 1;
+    min-width: 300px;
+    max-width: 350px;
+    background-color: transparent;
+    border-radius: 8px;
+    box-shadow: none;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.result-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.result-card-info {
+    padding: 15px;
+    text-align: center;
+}
+
+.result-card h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.1rem;
+    color: #333;
+    font-weight: 400;
+}
+
+.result-card p {
+    margin: 4px 0;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.label {
+    font-weight: 500;
+}
+
