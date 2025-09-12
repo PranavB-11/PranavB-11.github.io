@@ -45,7 +45,43 @@
         document.addEventListener('DOMContentLoaded', () => {
             const resultsGrid = document.getElementById('results-grid');
             let cardsHtml = '';
+            
+            const emirWithCannyKey = 'emir.jpg';
+            const emirWithoutCannyKey = 'emir_copy.jpg';
+
+            if (resultsData[emirWithCannyKey]) {
+                const result = resultsData[emirWithCannyKey];
+                const imagePath = `output_images/${emirWithCannyKey}`;
+                cardsHtml += `
+                    <div class="result-card">
+                        <img src="${imagePath}" alt="Aligned image of Emir with Canny edges">
+                        <div class="result-card-info">
+                            <h3>emir.tif (NCC with Canny edges)</h3>
+                            <p><span class="label">Green Disp (y, x):</span> (${result.g_disp[0]}, ${result.g_disp[1]})</p>
+                            <p><span class="label">Red Disp (y, x):</span> (${result.r_disp[0]}, ${result.r_disp[1]})</p>
+                        </div>
+                    </div>`;
+            }
+
+            if (resultsData[emirWithoutCannyKey]) {
+                const result = resultsData[emirWithoutCannyKey];
+                const imagePath = `output_images/${emirWithoutCannyKey}`;
+                cardsHtml += `
+                    <div class="result-card">
+                        <img src="${imagePath}" alt="Aligned image of Emir without Canny edges">
+                        <div class="result-card-info">
+                            <h3>emir.tif (just NCC)</h3>
+                            <p><span class="label">Green Disp (y, x):</span> (${result.g_disp[0]}, ${result.g_disp[1]})</p>
+                            <p><span class="label">Red Disp (y, x):</span> (${result.r_disp[0]}, ${result.r_disp[1]})</p>
+                        </div>
+                    </div>`;
+            }
+
             for (const filename in resultsData) {
+                if (filename === emirWithCannyKey || filename === emirWithoutCannyKey) {
+                    continue;
+                }
+
                 const result = resultsData[filename];
                 const originalName = result.original_name;
                 const gDisp = result.g_disp; 

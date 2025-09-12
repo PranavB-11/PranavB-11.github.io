@@ -21,6 +21,17 @@ const resultsData = {
             35
         ]
     },
+    "emir_copy.jpg": {
+        "original_name": "emir_copy.tif",
+        "g_disp": [
+            49,
+            24
+        ],
+        "r_disp": [
+            44,
+            45
+        ]
+    },
     "monastery.jpg": {
         "original_name": "monastery.jpg",
         "g_disp": [
