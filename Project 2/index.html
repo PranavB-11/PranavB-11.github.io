@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 2: Filters and Frequencies</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="../index.html" class="back-arrow">&larr;</a></li>
+            <li><a href="../Project 0/index.html" class="project-link">Project 0</a></li>
+            <li><a href="../Project 1/index.html" class="project-link">Project 1</a></li>
+            <li><a href="index.html" class="project-link active">Project 2</a></li>
+        </ul>
+    </nav>
+
+    <div class="main-container" style="padding-top: 80px; padding-bottom: 10px;">
+        <h1 style="font-size: 3.5rem;">Project 2: Filters and Frequencies</h1>
+    </div>
+
+    <div class="project-content" style="padding-top: 20px;">
+
+        <div class="section">
+            <h2>Part 1.1: Convolutions from Scratch</h2>
+            <div style="max-width: 960px; margin: 0 auto 40px auto; text-align: left; line-height: 1.6;">
+                <p>
+                    The runtime of the 4 loop convolution is significantly slower (18 seconds) than that of the 2 loop convolution (3 seconds) and Scipy's function (0.07 seconds). The speedup benefits mostly come from vectorization operations, getting rid of the 2 inner loops. For boundary cases, both of my convolution functions use zero-padding, creating a border of zeros around the image. Even for the Scipy function, I chose to use boundary='fill' which also is equivalent to the zero-padding method.
+                </p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Part 1.2: Finite Difference Operator</h2>
+            
+            <div class="image-gallery" style="display: flex; justify-content: center; align-items: flex-start; gap: 20px; flex-wrap: wrap; margin-top: 20px; margin-bottom: 40px;">
+                
+                <figure style="text-align: center; max-width: 48%;">
+                    <img src="output_images/partialdev.png" alt="Partial derivatives of an image in X and Y directions" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">
+                        Partial derivatives wrt X and Y
+                    </figcaption>
+                </figure>
+                
+                <figure style="text-align: center; max-width: 48%;">
+                    <img src="output_images/gradmag.png" alt="Gradient magnitude and its binarized edge image" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">
+                        Gradient Magnitude and Binarized Edge (adjusted threshold so background buildings are visible)
+                    </figcaption>
+                </figure>
+
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Part 1.3: DoG Filter</h2>
+            
+            <div class="image-gallery" style="display: flex; justify-content: center; margin-bottom: 20px; margin-top: 20px;">
+                <figure style="text-align: center; max-width: 60%;">
+                    <img src="output_images/filterkernels.png" alt="Derivative of Gaussian filter kernels" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">
+                        DoG Filters
+                    </figcaption>
+                </figure>
+            </div>
+
+            <div class="image-gallery" style="display: flex; justify-content: center; align-items: flex-start; gap: 20px; flex-wrap: wrap; margin-bottom: 40px;">
+                
+                <figure style="text-align: center; max-width: 48%;">
+                    <img src="output_images/blurconvcompare.png" alt="Comparison of blur-then-convolve vs DoG filter" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">
+                        Gaussian Smoothing and Convolving with DoG filters are the exact same since convolution is associative. DoG is simply more efficient.
+                    </figcaption>
+                </figure>
+                
+                <figure style="text-align: center; max-width: 48%;">
+                    <img src="output_images/gaussblur.png" alt="Comparison of finite difference vs Gaussian smoothed edges" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">
+                        The finite difference method reveals a noisy result since the difference operator amplifies every tiny intensity variation (without any Gaussian blurring). However, the trade-off is that smoothing results in edges that are blurrier and thicker which comes at a cost of sharper, more precise edges.
+                    </figcaption>
+                </figure>
+
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Part 2.1: Image Sharpening</h2>
+            
+            <div style="max-width: 960px; margin: 0 auto 40px auto; text-align: left; line-height: 1.6;">
+                <p>
+                    The unsharp mask filter uses both blur filters and high frequencies. In my implementation, the blur filter is a low-pass filter - it smooths images by removing high-frequency information. Using this filter, we subtract this version from the original, giving us an image containing only high-frequency details. Then, to sharpen the image, we can scale up these details by &alpha;. The higher &alpha; is, the more intense the sharpening effect.
+                </p>
+            </div>
+
+            <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+                <figure style="text-align: center; max-width: 70%;">
+                    <img src="output_images/tajshp.png" alt="Sharpened Taj Mahal" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">
+                        Taj Mahal with its high frequency details isolated and scaled up to result in the sharpened image.
+                    </figcaption>
+                </figure>
+            </div>
+
+            <div style="display: flex; justify-content: center; margin-bottom: 40px;">
+                <figure style="text-align: center; max-width: 70%;">
+                    <img src="output_images/psgshp.png" alt="Sharpened PSG celebration" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">
+                        Celebrations from PSG's championship win sharpened to make the flag less blurry and the crowd more enhanced.
+                    </figcaption>
+                </figure>
+            </div>
+
+            <div class="image-gallery" style="display: flex; justify-content: center; align-items: flex-start; gap: 20px; flex-wrap: wrap;">
+                
+                <figure style="text-align: center; max-width: 48%;">
+                    <img src="output_images/psgfried.png" alt="Over-sharpened PSG image" style="max-width: 100%; height: auto; border-radius: 8px;">
+                </figure>
+                
+                <figure style="text-align: center; max-width: 48%;">
+                    <img src="output_images/tajfried.png" alt="Over-sharpened Taj Mahal image" style="max-width: 100%; height: auto; border-radius: 8px;">
+                </figure>
+
+            </div>
+            
+            <p style="text-align: center; font-style: italic; color: #555; max-width: 960px; margin: 10px auto 40px auto; font-size: 0.9em;">
+                Increasing alpha leading to even more sharpness, however, now we overemphasize higher frequency details leading to some cartoonish depictions of the original images.
+            </p>
+
+        </div>
+
+       <div class="section">
+            <h2>Part 2.2: Hybrid Images</h2>
+
+            <div style="display: flex; justify-content: center; margin-bottom: 30px; margin-top: 20px;">
+                <figure style="text-align: center; max-width: 70%;">
+                    <img src="output_images/derekat.png" alt="Hybrid of Derek and a cat" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555; font-size: 0.9em;">
+                        Hybrid image of Derek and his cat
+                    </figcaption>
+                </figure>
+            </div>
+            
+            <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+                <figure style="text-align: center; max-width: 70%;">
+                    <img src="output_images/tabbit.png" alt="Hybrid of a tiger and a rabbit" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555; font-size: 0.9em;">
+                        Hybrid image of a tiger and a rabbit
+                    </figcaption>
+                </figure>
+            </div>
+
+            <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+                <figure style="text-align: center; max-width: 70%;">
+                    <img src="output_images/lejordan.png" alt="Hybrid of LeBron James and Michael Jordan" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555; font-size: 0.9em;">
+                        Hybrid image of Lebron and Jordan
+                    </figcaption>
+                </figure>
+            </div>
+
+            <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+                <figure style="text-align: center; max-width: 70%;">
+                    <img src="output_images/transforms.png" alt="Fourier transforms of hybrid image process" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555; font-size: 0.9em;">
+                        Fourier Transforms of the Lebron/Jordan Hybrid image
+                    </figcaption>
+                </figure>
+            </div>
+            
+            <div style="display: flex; justify-content: center; margin-bottom: 40px;">
+                <figure style="text-align: center; max-width: 70%;">
+                    <img src="output_images/filteredresults.png" alt="Filtered results for hybrid image process" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555; font-size: 0.9em;">
+                        Filtered Results of the Lebron/Jordan Hybrid image with cutoff frequencies of &sigma;=5 for the image of Lebron (low pass) and &sigma;=13 for Jordan (high pass)
+                    </figcaption>
+                </figure>
+            </div>
+            
+        </div>
+        
+        <div class="section">
+    <h2>Part 2.3/2.4: Gaussian and Laplacian Stacks + Multiresolution Blending</h2>
+    
+            <div style="display: flex; justify-content: center; margin-bottom: 30px; margin-top: 20px;">
+                <figure style="text-align: center; max-width: 70%;">
+                    <img src="output_images/oraple.png" alt="The Oraple" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555; font-size: 0.9em;">
+                        The Oraple
+                    </figcaption>
+                </figure>
+            </div>
+            
+            <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+                <figure style="text-align: center; max-width: 70%;">
+                    <img src="output_images/oraplegausslap.png" alt="Gaussian and Laplacian Stacks" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555; font-size: 0.9em;">
+                        Gaussian and Laplacian Stacks for the Apple and Orange
+                    </figcaption>
+                </figure>
+            </div>
+
+            <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+                <figure style="text-align: center; max-width: 70%;">
+                    <img src="output_images/342recreation.png" alt="Recreation of Figure 3.42" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555; font-size: 0.9em;">
+                        Recreating figure 3.42 for oraple
+                    </figcaption>
+                </figure>
+            </div>
+
+            <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+                <figure style="text-align: center; max-width: 70%;">
+                    <img src="output_images/orapleprocess.png" alt="Process visualization for the oraple" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555; font-size: 0.9em;">
+                        The process to created the oraple blended image (visualized through laplacian levels)
+                    </figcaption>
+                </figure>
+            </div>
+
+            <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+                <figure style="text-align: center; max-width: 70%;">
+                    <img src="output_images/forestcity.png" alt="Forest and city blended" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555; font-size: 0.9em;">
+                        Forest and city blended image
+                    </figcaption>
+                </figure>
+            </div>
+
+            <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+                <figure style="text-align: center; max-width: 70%;">
+                    <img src="output_images/forestcityprocess.png" alt="Process visualization for forest and city blend" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555; font-size: 0.9em;">
+                        The process to created the Forest + city blended image (visualized through laplacian levels)
+                    </figcaption>
+                </figure>
+            </div>
+
+            <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+                <figure style="text-align: center; max-width: 70%;">
+                    <img src="output_images/patagon.png" alt="Patagonia day and night blend" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555; font-size: 0.9em;">
+                        Patagonia in day and night blended image (using a parabolic mask)
+                    </figcaption>
+                </figure>
+            </div>
+
+            <div style="display: flex; justify-content: center; margin-bottom: 40px;">
+                <figure style="text-align: center; max-width: 70%;">
+                    <img src="output_images/patagonproc.png" alt="Process visualization for patagonia blend" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555; font-size: 0.9em;">
+                        Process to create the blended image with the irregular mask
+                    </figcaption>
+                </figure>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
