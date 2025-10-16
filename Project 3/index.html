@@ -219,6 +219,103 @@
             </div>
         </div>
 
+        <div class="section">
+            <h2>Part B.1: Harris Corner Detection & ANMS</h2>
+            <div style="max-width: 960px; margin: 0 auto 40px auto; text-align: left; line-height: 1.6;">
+                <p>
+                    The Harris Corner Detector finds features by identifying areas in the image with strong intensity changes in multiple directions. However, as the first image shows, this produces thousands of corners that are heavily clustered in high texture regions. To solve this, we use ANMS, which selects a fixed number of corners that are well-distributed spatially by calculating a suppression radius (the distance to the nearest corner that is significantly stronger). By selecting corners with the largest suppression radii, we choose points that are local maxima over a large area.
+                </p>
+            </div>
+            <div class="image-gallery" style="display: flex; justify-content: center; gap: 40px; margin-bottom: 40px;">
+                <figure style="text-align: center; max-width: 45%;">
+                    <img src="output_images2/cornersnoanms.png" alt="Detected Harris Corners before ANMS" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">
+                        All of the detected harris corners
+                    </figcaption>
+                </figure>
+                <figure style="text-align: center; max-width: 45%;">
+                    <img src="output_images2/cornerswithanms.png" alt="Corners after ANMS" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">
+                        500 of the 'best' harris corners detected in the image
+                    </figcaption>
+                </figure>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Part B.2: Feature Descriptor Extraction</h2>
+            <div style="max-width: 960px; margin: 0 auto 40px auto; text-align: left; line-height: 1.6;">
+                <p>
+                    Now we need to find feature descriptors that allow us to compare points and find potential matches between different images. Per the paper, these descriptors are a large 40x40 window extracted from a blurred version of the image around each corner, which is then sub-sampled every 5 pixels to create a 8x8 patch. This low-frequency sampling makes the descriptor robust to small errors in the corner's location. Finally, this patch is flattened into a 64 element vector and bias/gain normalized by subtracting its mean and dividing by its std dev. This makes the descriptor invariant to changes in lighting. The results appear blurry and abstract, but they capture the general low-frequency structure, rather than fine, unstable details.
+                </p>
+            </div>
+            <figure style="text-align: center; max-width: 60%; margin: 20px auto;">
+                <img src="output_images2/descriptors.png" alt="Extracted Feature Descriptors" style="max-width: 100%; height: auto; border-radius: 8px;">
+                <figcaption style="margin-top: 10px; font-style: italic; color: #555;">A sample of extracted and normalized 8x8 feature descriptors.</figcaption>
+            </figure>
+        </div>
+
+        <div class="section">
+            <h2>Part B.3: Feature Matching</h2>
+            <div style="max-width: 960px; margin: 0 auto 40px auto; text-align: left; line-height: 1.6;">
+                <p>
+                    With descriptors extracted for both images, now we find correspondences. We use both 1-NN and 2-NN because simply taking the best match for every feature may lead to outliers because many image patches aren't unique and may be coincidentally similar to other descriptors. For a reliable match, we use Lowe's proposition described in the paper: the distance to the 1-NN should be significantly smaller than the distance to the 2-NN. This is implemented by computing the ration of the squared distances and only accepting matches where the ratio is below a threshold of 0.5. This gives us a good set of matches for RANSAC.
+                </p>
+            </div>
+            <figure style="text-align: center; max-width: 95%; margin: 20px auto;">
+                <img src="output_images2/matching.png" alt="Feature matches between two images" style="max-width: 100%; height: auto; border-radius: 8px;">
+                <figcaption style="margin-top: 10px; font-style: italic; color: #555;">Feature matches found using Lowe's ratio test.</figcaption>
+            </figure>
+        </div>S
+
+        <div class="section">
+            <h2>Part B.4: RANSAC and Automatic Mosaics</h2>
+            <div style="max-width: 960px; margin: 0 auto 40px auto; text-align: left; line-height: 1.6;">
+                <p>
+                    Finally, we use our feature matches to compute a homography and stitch the images. However, the set of matches from the previous part may still contain outliers. To combat this, we implement RANSAC which iteratively finds the best homography by building a consensus from the inliers (good matches) while ignoring outliers. It first randomly selects a 4-point sample from the list of features matches, then computes a homography H, scores this H on all of the matches by counting how many points when transformed by H land close to their corresponding match in the other image (these points are the inliers), then at the end, pick the homography that has the largest set of inliers, re-computing a new homography using all the points from this set.
+                </p>
+                <p>
+                    The difference in quality between the manual and automatic mosaics is subtle for these images, but if you look at the correspondences that I manually selected, there is a slight distortion at those points due to human error. This occurs even with careful selection. If I rushed any of those correspondences, then the final output would be very distorted and blurry. Also, manual mosaics are generated from a homography computed using a very small number of points, which is extremely sensitive to errors. This is exactly where RANSAC thrives, since it finds the largest subset of points that all agree on a single transformation, discarding incorrect matches. This is why the automatic mosaics are sharp and are free of the visual artifacts present in the manual versions.
+                </p>
+            </div>
+
+            <div class="image-gallery" style="margin-top: 40px; margin-bottom: 40px;">
+                <h3 style="text-align: center; font-weight: 500; margin-bottom: 20px;">Manual Mosaics</h3>
+                <div style="display: flex; justify-content: center; align-items: flex-start; gap: 15px;">
+                    <figure style="text-align: center; max-width: 32%;">
+                        <img src="output_images2/manualsunset1.png" alt="Manual Mosaic 1" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    </figure>
+                    <figure style="text-align: center; max-width: 32%;">
+                        <img src="output_images2/manualsunset2.png" alt="Manual Mosaic 2" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    </figure>
+                    <figure style="text-align: center; max-width: 32%;">
+                        <img src="output_images2/manualbuidling.png" alt="Manual Mosaic 3" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    </figure>
+                </div>
+                 <p style="text-align: center; font-style: italic; color: #555; margin-top: 15px;">
+                    Mosaics created using a naive homography from a few random points.
+                </p>
+            </div>
+
+            <hr style="width: 80%; margin: 60px auto;">
+
+            <div class="image-gallery" style="display: flex; flex-direction: column; align-items: center; gap: 40px; margin-top: 40px;">
+                <h3 style="text-align: center; font-weight: 500; margin-bottom: 20px;">Automatic Mosaics</h3>
+                <figure style="text-align: center; max-width: 95%;">
+                    <img src="output_images2/autosunset1.png" alt="Automatic Mosaic 1" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">Automatic Sunset Mosaic 1</figcaption>
+                </figure>
+                <figure style="text-align: center; max-width: 95%;">
+                    <img src="output_images2/autosunset2.png" alt="Automatic Mosaic 2" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">Automatic Sunset Mosaic 2</figcaption>
+                </figure>
+                <figure style="text-align: center; max-width: 95%;">
+                    <img src="output_images2/autobuilding.png" alt="Automatic Mosaic 3" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">Automatic Building Mosaic</figcaption>
+                </figure>
+            </div>
+        </div>
+
     </div>
 
 </body>
