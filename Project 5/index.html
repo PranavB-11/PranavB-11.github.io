@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 5: The Power of Diffusion Models!</title>
+    <link rel="stylesheet" href="../style.css"> 
+    <link rel="stylesheet" href="style.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="../index.html" class="back-arrow">&larr;</a></li>
+            <li><a href="../Project 1/index.html" class="project-link">Project 1</a></li>
+            <li><a href="../Project 2/index.html" class="project-link">Project 2</a></li>
+            <li><a href="../Project 3/index.html" class="project-link">Project 3</a></li>
+            <li><a href="../Project 4/index.html" class="project-link">Project 4</a></li>
+            <li><a href="index.html" class="project-link active">Project 5</a></li>
+        </ul>
+    </nav>
+
+    <div class="main-container" style="padding-top: 80px; padding-bottom: 10px;">
+        <h1 style="font-size: 3.5rem;">Project 5: The Power of Diffusion Models!</h1>
+        <h2 style="text-align: center; font-weight: 400; color: #666;">Part A</h2>
+    </div>
+
+    <div class="project-content" style="padding-top: 20px;">
+
+        <div class="section">
+            <h2>Part 0: Setup & Sampling</h2>
+            <div style="max-width: 960px; margin: 0 auto 20px auto; text-align: left; line-height: 1.6;">
+                <p><strong>Seed Used:</strong> 123</p>
+            </div>
+            
+            <h3 style="text-align: center; font-weight: 500; margin-top: 40px; margin-bottom: 20px;">Prompt: "a photo of a man on top of a mountain overseeing a dystopian city"</h3>
+            <div class="image-gallery" style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;">
+                <figure style="text-align: center; max-width: 45%;">
+                    <img src="images/part0_1_20.png" alt="Man on mountain 20 steps" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">20 Iterations</figcaption>
+                </figure>
+                <figure style="text-align: center; max-width: 45%;">
+                    <img src="images/part0_1_100.png" alt="Man on mountain 100 steps" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">100 Iterations</figcaption>
+                </figure>
+            </div>
+            <p style="max-width: 800px; margin: 0 auto 40px auto; text-align: left; color: #444;">
+                The output for the 100 iterations looks far more detailed, with the person's silhouette more defined and the details of a distant city still sharp and very apparent. In contrast, the 20 iteration version has blocky textures (look at the rocks from the mountain), giving it a more cartoony, less detailed vibe.
+            </p>
+
+            <h3 style="text-align: center; font-weight: 500; margin-top: 40px; margin-bottom: 20px;">Prompt: "a cyberpunk themed city"</h3>
+            <div class="image-gallery" style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;">
+                <figure style="text-align: center; max-width: 45%;">
+                    <img src="images/part0_2_20.png" alt="Cyberpunk city 20 steps" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">20 Iterations</figcaption>
+                </figure>
+                <figure style="text-align: center; max-width: 45%;">
+                    <img src="images/part0_2_100.png" alt="Cyberpunk city 100 steps" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">100 Iterations</figcaption>
+                </figure>
+            </div>
+            <p style="max-width: 800px; margin: 0 auto 40px auto; text-align: left; color: #444;">
+                The quality of both images is quite good; however, the 100 iteration version gives a cool first-person POV of the city, whereas the 20 iteration version places a person randomly on the street, capturing the essence of the prompt without elaborating too much.
+            </p>
+
+            <h3 style="text-align: center; font-weight: 500; margin-top: 40px; margin-bottom: 20px;">Prompt: "an oil painting of a snowy mountain"</h3>
+            <div class="image-gallery" style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;">
+                <figure style="text-align: center; max-width: 45%;">
+                    <img src="images/part0_3_20.png" alt="Snowy mountain 20 steps" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">20 Iterations</figcaption>
+                </figure>
+                <figure style="text-align: center; max-width: 45%;">
+                    <img src="images/part0_3_100.png" alt="Snowy mountain 100 steps" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">100 Iterations</figcaption>
+                </figure>
+            </div>
+            <p style="max-width: 800px; margin: 0 auto 40px auto; text-align: left; color: #444;">
+                Both images very clearly capture an oil painting of a snowy mountain. The 100 iteration version has more defined textures with more focus on the foreground trees, whereas the 20 iteration version seems to skimp on those details.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>Part 1.1 & 1.2: Forward Process & Classical Denoising</h2>
+
+            <figure style="text-align: center; max-width: 80%; margin: 20px auto 40px auto;">
+                <img src="images/part1_1.png" alt="Forward Process Noise Levels" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    Part 1.1: Original Image &rarr; Noisy (t=250) &rarr; Noisy (t=500) &rarr; Noisy (t=750)
+                </figcaption>
+            </figure>
+
+            <figure style="text-align: center; max-width: 80%; margin: 20px auto 40px auto;">
+                <img src="images/part1_2.png" alt="Gaussian Blur Results" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    Part 1.2: Gaussian Blur Denoising at t=250, t=500, and t=750 (Left to Right)
+                </figcaption>
+            </figure>
+        </div>
+
+        <div class="section">
+            <h2>Part 1.3: One-Step Denoising</h2>
+
+            <figure style="text-align: center; max-width: 80%; margin: 20px auto 40px auto;">
+                <img src="images/part1_3_1.png" alt="One-Step Denoising t=250" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    Noise Level t=250: Original &rarr; Noisy &rarr; One-Step Estimate
+                </figcaption>
+            </figure>
+
+            <figure style="text-align: center; max-width: 80%; margin: 20px auto 40px auto;">
+                <img src="images/part1_3_2.png" alt="One-Step Denoising t=500" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    Noise Level t=500: Original &rarr; Noisy &rarr; One-Step Estimate
+                </figcaption>
+            </figure>
+
+            <figure style="text-align: center; max-width: 80%; margin: 20px auto 40px auto;">
+                <img src="images/part1_3_3.png" alt="One-Step Denoising t=750" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    Noise Level t=750: Original &rarr; Noisy &rarr; One-Step Estimate
+                </figcaption>
+            </figure>
+        </div>
+
+        <div class="section">
+            <h2>Part 1.4: Iterative Denoising</h2>
+
+            <figure style="text-align: center; max-width: 80%; margin: 20px auto 40px auto;">
+                <img src="images/part1_4_1.png" alt="Iterative Denoising Progress" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    Progress: Noisy (t=690) &rarr; Clean (t=90) (Every 5th loop)
+                </figcaption>
+            </figure>
+
+            <figure style="text-align: center; max-width: 80%; margin: 20px auto 40px auto;">
+                <img src="images/part1_4_2.png" alt="Iterative vs One-Step vs Gaussian" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    Final Comparison: Iteratively Denoised vs One-Step Estimate vs Gaussian Blur
+                </figcaption>
+            </figure>
+        </div>
+
+        <div class="section">
+            <h2>Part 1.5: Diffusion Model Sampling</h2>
+
+            <figure style="text-align: center; max-width: 80%; margin: 20px auto 40px auto;">
+                <img src="images/part1_5.png" alt="Samples without CFG" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    5 Samples generated from scratch (without CFG)
+                </figcaption>
+            </figure>
+        </div>
+
+        <div class="section">
+            <h2>Part 1.6: Classifier-Free Guidance (CFG)</h2>
+
+            <figure style="text-align: center; max-width: 80%; margin: 20px auto 40px auto;">
+                <img src="images/part1_6.png" alt="Samples with CFG" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    5 Samples generated with Classifier-Free Guidance (Scale = 7)
+                </figcaption>
+            </figure>
+        </div>
+
+        <div class="section">
+            <h2>Part 1.7: Image-to-Image Translation</h2>
+            <div style="max-width: 960px; margin: 0 auto 20px auto; text-align: left; line-height: 1.6;">
+                <p>
+                    Using the SDEdit algorithm, I took existing images, added noise to them, and then denoised them to force them onto the natural image manifold.
+                </p>
+                <p>
+                    <strong>i_start values:</strong> [1, 3, 5, 7, 20, 25, 30].<br>
+                    <strong>Low i_start (1):</strong> High Noise &rarr; The model hallucinates widely different content.<br>
+                    <strong>High i_start (30):</strong> Low Noise &rarr; The model preserves the original structure and makes minor edits.
+                </p>
+            </div>
+
+            <h3 style="text-align: center; font-weight: 500; margin-top: 40px; margin-bottom: 20px;">Campanile</h3>
+            <figure style="text-align: center; max-width: 80%; margin: 20px auto 40px auto;">
+                <img src="images/part1_7_1.png" alt="Campanile SDEdit" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    Left to Right: i_start 1, 3, 5, 7, 20, 25, 30
+                </figcaption>
+            </figure>
+
+            <h3 style="text-align: center; font-weight: 500; margin-top: 40px; margin-bottom: 20px;">Eiffel Tower</h3>
+            <figure style="text-align: center; max-width: 80%; margin: 20px auto 40px auto;">
+                <img src="images/part1_7_2.png" alt="Eiffel Tower SDEdit" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    Left to Right: i_start 1, 3, 5, 7, 20, 25, 30
+                </figcaption>
+            </figure>
+
+            <h3 style="text-align: center; font-weight: 500; margin-top: 40px; margin-bottom: 20px;">Old Trafford</h3>
+            <figure style="text-align: center; max-width: 80%; margin: 20px auto 20px auto;">
+                <img src="images/part1_7_3.png" alt="Old Trafford SDEdit" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    Left to Right: i_start 1, 3, 5, 7, 20, 25, 30
+                </figcaption>
+            </figure>
+            <p style="max-width: 800px; margin: 0 auto 40px auto; text-align: left; color: #444;">
+                For the Old Trafford image, it took longer to return to the original image form possibly because its structure in the image is less distinct than the others. It kind of blends in.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>Part 1.7.1: SDEdit on Other Images</h2>
+            <div style="max-width: 960px; margin: 0 auto 20px auto; text-align: left; line-height: 1.6;">
+                <p>
+                    I applied the same SDEdit process to images not in the training set: one downloaded from the web and two hand-drawn sketches.
+                </p>
+            </div>
+
+            <h3 style="text-align: center; font-weight: 500; margin-top: 40px; margin-bottom: 20px;">Source Images</h3>
+            <div class="image-gallery" style="display: flex; justify-content: center; gap: 20px; margin-bottom: 40px;">
+                <figure style="text-align: center; max-width: 30%;">
+                    <img src="images/flyingdog.jpg" alt="Web Image" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">Web Image</figcaption>
+                </figure>
+                <figure style="text-align: center; max-width: 30%;">
+                    <img src="images/hand1.jpg" alt="Hand Drawn Image 1" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">Hand Drawn 1</figcaption>
+                </figure>
+                <figure style="text-align: center; max-width: 30%;">
+                    <img src="images/hand2.jpg" alt="Hand Drawn Image 2" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">Hand Drawn 2</figcaption>
+                </figure>
+            </div>
+
+            <h3 style="text-align: center; font-weight: 500; margin-top: 40px; margin-bottom: 20px;">SDEdit: Web Image</h3>
+            <figure style="text-align: center; max-width: 80%; margin: 20px auto 40px auto;">
+                <img src="images/part1_7_1_1.png" alt="SDEdit Web Image Results" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    Left to Right: i_start 1, 3, 5, 7, 10, 20
+                </figcaption>
+            </figure>
+
+            <h3 style="text-align: center; font-weight: 500; margin-top: 40px; margin-bottom: 20px;">SDEdit: Hand Drawn 1</h3>
+            <figure style="text-align: center; max-width: 80%; margin: 20px auto 40px auto;">
+                <img src="images/part1_7_1_2.png" alt="SDEdit Hand Drawn 1 Results" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    Left to Right: i_start 1, 3, 5, 7, 10, 20
+                </figcaption>
+            </figure>
+
+            <h3 style="text-align: center; font-weight: 500; margin-top: 40px; margin-bottom: 20px;">SDEdit: Hand Drawn 2</h3>
+            <figure style="text-align: center; max-width: 80%; margin: 20px auto 40px auto;">
+                <img src="images/part1_7_1_3.png" alt="SDEdit Hand Drawn 2 Results" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    Left to Right: i_start 1, 3, 5, 7, 10, 20
+                </figcaption>
+            </figure>
+        </div>
+
+        <div class="section">
+            <h2>Part 1.7.2: Inpainting</h2>
+            <div style="max-width: 960px; margin: 0 auto 20px auto; text-align: left; line-height: 1.6;">
+                <p>
+                    I implemented a function to inpaint specific regions of an image. By applying a binary mask, I kept pixels outside the mask identical to the original image while allowing the diffusion model to generate new content inside the masked region (where the value is 1).
+                </p>
+            </div>
+
+            <h3 style="text-align: center; font-weight: 500; margin-top: 40px; margin-bottom: 20px;">Campanile Restoration</h3>
+            <figure style="text-align: center; max-width: 80%; margin: 20px auto 40px auto;">
+                <img src="images/part1_7_2_1.png" alt="Campanile Inpainting" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    Left to Right: Original, Masked Input, Inpainted Result
+                </figcaption>
+            </figure>
+
+            <h3 style="text-align: center; font-weight: 500; margin-top: 40px; margin-bottom: 20px;">Eiffel Tower Inpainting</h3>
+            <figure style="text-align: center; max-width: 80%; margin: 20px auto 40px auto;">
+                <img src="images/part1_7_2_2.png" alt="Eiffel Tower Inpainting" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    Left to Right: Original, Masked Input, Inpainted Result
+                </figcaption>
+            </figure>
+
+            <h3 style="text-align: center; font-weight: 500; margin-top: 40px; margin-bottom: 20px;">Flying Dog Inpainting</h3>
+            <figure style="text-align: center; max-width: 80%; margin: 20px auto 40px auto;">
+                <img src="images/part1_7_2_3.png" alt="Flying Dog Inpainting" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    Left to Right: Original, Masked Input, Inpainted Result
+                </figcaption>
+            </figure>
+        </div>
+
+        <div class="section">
+            <h2>Part 1.7.3: Text-Conditional Image-to-image Translation</h2>
+            <div style="max-width: 960px; margin: 0 auto 20px auto; text-align: left; line-height: 1.6;">
+                <p>
+                    I did the same SDEdit procedure as before, but this time changing the text prompt to guide the projection. This turns the image into a "hybrid" of the original structure and the new text description.
+                </p>
+            </div>
+
+            <h3 style="text-align: center; font-weight: 500; margin-top: 40px; margin-bottom: 20px;">Campanile &rarr; "a rocket ship"</h3>
+            <figure style="text-align: center; max-width: 80%; margin: 20px auto 40px auto;">
+                <img src="images/part1_7_3_1.png" alt="Campanile to Rocket Ship" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    Left to Right: i_start 1, 3, 5, 7, 10, 20
+                </figcaption>
+            </figure>
+
+            <h3 style="text-align: center; font-weight: 500; margin-top: 40px; margin-bottom: 20px;">Eiffel Tower &rarr; "a cyberpunk themed city"</h3>
+            <figure style="text-align: center; max-width: 80%; margin: 20px auto 40px auto;">
+                <img src="images/part1_7_3_2.png" alt="Eiffel Tower to Cyberpunk" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    Left to Right: i_start 1, 3, 5, 7, 10, 15, 20, 22
+                </figcaption>
+            </figure>
+
+            <h3 style="text-align: center; font-weight: 500; margin-top: 40px; margin-bottom: 20px;">Old Trafford &rarr; "a wild west themed town"</h3>
+            <figure style="text-align: center; max-width: 80%; margin: 20px auto 40px auto;">
+                <img src="images/part1_7_3_3.png" alt="Old Trafford to Wild West" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    Left to Right: i_start 1, 3, 5, 7, 10, 15, 20, 22
+                </figcaption>
+            </figure>
+            <p style="max-width: 800px; margin: 0 auto 40px auto; text-align: left; color: #444;">
+                Note: I added intermediate i_start values (15 and 22) for the Eiffel Tower and Old Trafford images to show a smoother transition, as the original structures took longer to emerge compared to the Campanile.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>Part 1.8: Visual Anagrams</h2>
+            <div style="max-width: 960px; margin: 0 auto 20px auto; text-align: left; line-height: 1.6;">
+                <p>
+                    I created optical illusions by denoising an image with one prompt normally, and with a second prompt while flipped upside down. This forces the model to generate an image that looks like one object when right-side up, and a completely different object when flipped 180 degrees.
+                </p>
+            </div>
+
+            <h3 style="text-align: center; font-weight: 500; margin-top: 40px; margin-bottom: 20px;">"Old Man" vs "Campfire"</h3>
+            <figure style="text-align: center; max-width: 80%; margin: 20px auto 40px auto;">
+                <img src="images/part1_8_1.png" alt="Old Man and Campfire Anagram" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    Left: "an oil painting of an old man" <br>
+                    Right: "an oil painting of people around a campfire" (Flipped Upside Down)
+                </figcaption>
+            </figure>
+
+            <h3 style="text-align: center; font-weight: 500; margin-top: 40px; margin-bottom: 20px;">"Snowy Mountain" vs "Bearded Wizard"</h3>
+            <figure style="text-align: center; max-width: 80%; margin: 20px auto 40px auto;">
+                <img src="images/part1_8_2.png" alt="Snowy Mountain and Wizard Anagram" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    Left: "an oil painting of a snowy mountain" <br>
+                    Right: "an oil painting of a bearded wizard" (Flipped Upside Down)
+                </figcaption>
+            </figure>
+        </div>
+
+        <div class="section">
+            <h2>Part 1.9: Hybrid Images</h2>
+            <div style="max-width: 960px; margin: 0 auto 20px auto; text-align: left; line-height: 1.6;">
+                <p>
+                    I created hybrid images using Factorized Diffusion, combining the low-frequency components of one prompt (visible from far away) with the high-frequency components of another (visible up close).
+                </p>
+            </div>
+
+            <h3 style="text-align: center; font-weight: 500; margin-top: 40px; margin-bottom: 20px;">"Skull" vs "Waterfalls"</h3>
+            <figure style="text-align: center; max-width: 50%; margin: 20px auto 40px auto;">
+                <img src="images/part1_9_1.png" alt="Skull and Waterfall Hybrid" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    Low Frequency (Far Away): "a lithograph of a skull" <br>
+                    High Frequency (Close Up): "a lithograph of waterfalls"
+                </figcaption>
+            </figure>
+
+            <h3 style="text-align: center; font-weight: 500; margin-top: 40px; margin-bottom: 20px;">"Fried Egg" vs "Galaxy"</h3>
+            <figure style="text-align: center; max-width: 50%; margin: 20px auto 40px auto;">
+                <img src="images/part1_9_2.png" alt="Egg and Galaxy Hybrid" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    Low Frequency (Far Away): "a photo of a fried egg" <br>
+                    High Frequency (Close Up): "a photo of a galaxy"
+                </figcaption>
+            </figure>
+
+            <p style="max-width: 800px; margin: 0 auto 40px auto; text-align: left; color: #444;">
+                The results were much better when I averaged the variances between the two images rather than fixing the variance of the first image. This mitigated the issue I was having where one of the images was much more apparent than the other.
+            </p>
+        </div>
+
+    </div>
+
+</body>
+</html>
