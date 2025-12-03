@@ -383,5 +383,269 @@
 
     </div>
 
+    <div class="main-container" style="padding-top: 60px; padding-bottom: 10px;">
+        <h2 style="text-align: center; font-weight: 400; color: #666; font-size: 2.5rem;">Part B: Flow Matching</h2>
+    </div>
+
+    <div class="project-content" style="padding-top: 20px;">
+
+        <div class="section">
+            <h2>Part 1.1: Implementing the UNet</h2>
+            <div style="max-width: 960px; margin: 0 auto 20px auto; text-align: left; line-height: 1.6;">
+                <p>
+                    I implemented the unconditional UNet architecture using standard PyTorch operations. The network consists of downsampling and upsampling blocks connected via skip connections (concatenation), built from the atomic operations shown below.
+                </p>
+            </div>
+            
+            <div class="image-gallery" style="display: flex; justify-content: center; gap: 20px; margin-bottom: 40px;">
+                <figure style="text-align: center; max-width: 45%;">
+                    <img src="imagesb/part1_1_1.png" alt="Unconditional UNet" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">The Unconditional UNet Architecture</figcaption>
+                </figure>
+                <figure style="text-align: center; max-width: 45%;">
+                    <img src="imagesb/part1_1_2.png" alt="Standard UNet Operations" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">Standard UNet Operations</figcaption>
+                </figure>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Part 1.2: The Noising Process</h2>
+            <div style="max-width: 960px; margin: 0 auto 20px auto; text-align: left; line-height: 1.6;">
+                <p>
+                    I implemented the forward noising process that maps a clean image to a noisy one using the equation \(z = x + \sigma \epsilon\).
+                </p>
+            </div>
+            <figure style="text-align: center; max-width: 90%; margin: 20px auto 40px auto;">
+                <img src="imagesb/part1_2.png" alt="Noising Process" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    Visualizing noise levels from &sigma; = 0.0 to 1.0.
+                </figcaption>
+            </figure>
+        </div>
+
+        <div class="section">
+            <h2>Part 1.2.1: Training a Single-Step Denoiser</h2>
+            <div style="max-width: 960px; margin: 0 auto 20px auto; text-align: left; line-height: 1.6;">
+                <p>
+                    I trained the UNet to map noisy images (with &sigma;=0.5) back to their clean versions using MSE loss.
+                </p>
+            </div>
+            
+            <figure style="text-align: center; max-width: 60%; margin: 20px auto 20px auto;">
+                <img src="imagesb/part1_2_1_3.png" alt="Training Loss Curve" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 10px; font-style: italic; color: #555;">Training Loss Curve</figcaption>
+            </figure>
+
+            <div class="image-gallery" style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;">
+                <figure style="text-align: center; max-width: 45%;">
+                    <img src="imagesb/part1_2_1_1.png" alt="Epoch 1 Results" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">After Epoch 1</figcaption>
+                </figure>
+                <figure style="text-align: center; max-width: 45%;">
+                    <img src="imagesb/part1_2_1_2.png" alt="Epoch 5 Results" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">After Epoch 5</figcaption>
+                </figure>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Part 1.2.2: Out-of-Distribution Testing</h2>
+            <div style="max-width: 960px; margin: 0 auto 20px auto; text-align: left; line-height: 1.6;">
+                <p>
+                    Here, I visualized how the denoiser (trained on &sigma;=0.5) generalizes to noise levels it wasn't explicitly trained on. I tested this on two different digits (7 and 4).
+                </p>
+                <p>
+                    Observation: As observed in the results below, the denoiser performs reasonably well around the training noise level (&sigma;=0.5) and lower. However, the quality of the reconstruction degrades significantly as &sigma; increases (e.g., at &sigma;=0.8 and 1.0), resulting in much blurrier and less distinct output digits.
+                </p>
+            </div>
+            
+            <figure style="text-align: center; max-width: 90%; margin: 20px auto 40px auto;">
+                <img src="imagesb/part1_2_2_1.png" alt="OOD Testing Digit 7" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    Denoising results for <strong>Digit 7</strong> across varying noise levels.
+                </figcaption>
+            </figure>
+
+            <figure style="text-align: center; max-width: 90%; margin: 20px auto 40px auto;">
+                <img src="imagesb/part1_2_2_2.png" alt="OOD Testing Digit 4" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    Denoising results for <strong>Digit 4</strong> across varying noise levels.
+                </figcaption>
+            </figure>
+        </div>
+
+        <div class="section">
+            <h2>Part 1.2.3: Denoising Pure Noise</h2>
+            <p style="max-width: 800px; margin: 0 auto 20px auto; text-align: left; color: #444;">
+                I attempted to use the single-step denoiser to generate images from pure Gaussian noise.
+            </p>
+
+            <figure style="text-align: center; max-width: 60%; margin: 20px auto 20px auto;">
+                <img src="imagesb/part1_2_3_3.png" alt="Pure Noise Loss" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 10px; font-style: italic; color: #555;">Training Loss Curve</figcaption>
+            </figure>
+
+            <div class="image-gallery" style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;">
+                <figure style="text-align: center; max-width: 45%;">
+                    <img src="imagesb/part1_2_3_1.png" alt="Pure Noise Epoch 1" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">After Epoch 1</figcaption>
+                </figure>
+                <figure style="text-align: center; max-width: 45%;">
+                    <img src="imagesb/part1_2_3_2.png" alt="Pure Noise Epoch 5" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">After Epoch 5</figcaption>
+                </figure>
+            </div>
+
+            <p style="max-width: 800px; margin: 0 auto 40px auto; text-align: left; color: #444;">
+                Qualitative Results: The generated images appear as blurry "ghost" shapes resembling an average of all digits, which is apparent in the output for both the 1st and 5th epoch. <br><br>
+                Analysis: The model is trained with MSE loss. When given pure noise containing no structural information, the optimal prediction minimizing the L2 loss is the mean (centroid) of the training dataset. The model essentially averages all digits into one ambiguous shape. <br><br>
+                Why do they look the same? The model converges to this "mean" shape very quickly (within the first epoch). Because the input is random noise with no distinct features, the model has no information to help it break symmetry or specialize towards a specific digit. It gets "stuck" predicting this safe average to minimize its global error, meaning further training (Epoch 5) does not change the result.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>Part 2.1: Adding Time Conditioning</h2>
+            <div style="max-width: 960px; margin: 0 auto 20px auto; text-align: left; line-height: 1.6;">
+                <p>
+                    To enable Flow Matching, I modified the UNet to accept a time step \(t\). This was achieved using Fully Connected Blocks (FCBlock) to project the scalar time into a vector, which then modulates the feature maps via channel-wise scaling and shifting.
+                </p>
+            </div>
+            
+            <div class="image-gallery" style="display: flex; justify-content: center; gap: 20px; margin-bottom: 40px;">
+                <figure style="text-align: center; max-width: 45%;">
+                    <img src="imagesb/part2_1_1.png" alt="Conditioned UNet Diagram" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">Time-Conditioned UNet Architecture</figcaption>
+                </figure>
+                <figure style="text-align: center; max-width: 45%;">
+                    <img src="imagesb/part2_1_2.png" alt="FCBlock Diagram" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">FCBlock for Conditioning</figcaption>
+                </figure>
+            </div>
+        </div>
+
+        <div class="section">
+        <div class="section">
+            <h2>Part 2.2: Training Time-Conditioned Flow Matching</h2>
+            <div style="max-width: 960px; margin: 0 auto 20px auto; text-align: left; line-height: 1.6;">
+                <p>
+                    I trained the Time-Conditioned UNet to predict the flow field that transports random noise to clean images.
+                </p>
+            </div>
+            <figure style="text-align: center; max-width: 60%; margin: 20px auto 40px auto;">
+                <img src="imagesb/part2_2.png" alt="Time Conditioned Loss" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    Training Loss (Time-Conditioned)
+                </figcaption>
+            </figure>
+        </div>
+
+        <div class="section">
+            <h2>Part 2.3: Sampling from Time-Conditioned Model</h2>
+            <div class="image-gallery" style="display: flex; justify-content: center; gap: 15px; margin-bottom: 40px;">
+                <figure style="text-align: center; max-width: 30%;">
+                    <img src="imagesb/part2_3_1.png" alt="Epoch 1" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">Epoch 1</figcaption>
+                </figure>
+                <figure style="text-align: center; max-width: 30%;">
+                    <img src="imagesb/part2_3_2.png" alt="Epoch 5" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">Epoch 5</figcaption>
+                </figure>
+                <figure style="text-align: center; max-width: 30%;">
+                    <img src="imagesb/part2_3_3.png" alt="Epoch 10" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">Epoch 10</figcaption>
+                </figure>
+            </div>
+            <p style="max-width: 800px; margin: 0 auto 40px auto; text-align: left; color: #444;">
+                By Epoch 10, the model generates legible digits. Since it is unconditional, the results are random samples from the manifold. Also, the random seed is set to the sample number k (0 for sample 0, 1 for sample 1, etc.) whilst sampling.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>Part 2.4: Adding Class-Conditioning to UNet</h2>
+            <div style="max-width: 960px; margin: 0 auto 20px auto; text-align: left; line-height: 1.6;">
+                <p>
+                    To give the model the ability to generate specific digits, I injected class information into the UNet. This involved mapping the scalar class label (0-9) to a one-hot vector and passing it through additional FCBlocks. The output modulates the unflattened and upsampled feature maps via a scaling factor, similar to the time embedding.
+                </p>
+                <p>
+                    Additionally, to support Classifier-Free Guidance (CFG), I implemented a dropout mechanism where the class conditioning vector is set to zero 10% of the time during training (p_uncond = 0.1). This allows the model to learn both conditional and unconditional generation, which is crucial for the guidance sampling in Part 2.6.
+                </p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Part 2.5: Class-Conditioned Flow Matching</h2>
+            <div style="max-width: 960px; margin: 0 auto 20px auto; text-align: left; line-height: 1.6;">
+                <p>
+                    I added Class Conditioning to the UNet (using FCBlocks and one-hot vectors) and trained it with Classifier-Free Guidance (CFG).
+                </p>
+            </div>
+            <figure style="text-align: center; max-width: 60%; margin: 20px auto 40px auto;">
+                <img src="imagesb/part2_5.png" alt="Class Conditioned Loss" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    Training Loss (Standard with Scheduler)
+                </figcaption>
+            </figure>
+
+            <div style="max-width: 960px; margin: 40px auto 20px auto; text-align: left; line-height: 1.6;">
+                <p>
+                    To see if the training process could be simplified, I removed the exponential learning rate scheduler. To compensate for the lack of decay (which originally started at 1e-2), I lowered the constant learning rate to 1e-4. This ensured stable convergence throughout the training process.
+                </p>
+            </div>
+            <figure style="text-align: center; max-width: 60%; margin: 20px auto 40px auto;">
+                <img src="imagesb/part2_5ns.png" alt="No Scheduler Loss" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                <figcaption style="margin-top: 15px; font-weight: 500; color: #333;">
+                    Training Loss (No Scheduler, Constant LR 1e-4)
+                </figcaption>
+            </figure>
+        </div>
+
+        <div class="section">
+            <h2>Part 2.6: Sampling with Classifier-Free Guidance</h2>
+            <div style="max-width: 960px; margin: 0 auto 20px auto; text-align: left; line-height: 1.6;">
+                <p>
+                    Below are the results generated with a guidance scale of 5.0. Each row corresponds to a specific digit request. By Epoch 10, the digits are sharp and correctly match the requested class. Also, the random seed for sampling is 123 + epoch to add some variance to the samples.
+                </p>
+            </div>
+            
+            <div class="image-gallery" style="display: flex; justify-content: center; gap: 15px; margin-bottom: 40px;">
+                <figure style="text-align: center; max-width: 30%;">
+                    <img src="imagesb/part2_6_1.png" alt="Epoch 1 CFG" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">Epoch 1</figcaption>
+                </figure>
+                <figure style="text-align: center; max-width: 30%;">
+                    <img src="imagesb/part2_6_2.png" alt="Epoch 5 CFG" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">Epoch 5</figcaption>
+                </figure>
+                <figure style="text-align: center; max-width: 30%;">
+                    <img src="imagesb/part2_6_3.png" alt="Epoch 10 CFG" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">Epoch 10</figcaption>
+                </figure>
+            </div>
+
+            <div style="max-width: 960px; margin: 40px auto 20px auto; text-align: left; line-height: 1.6;">
+                <p>
+                    Training without Scheduler. To see if the training process could be simplified, I removed the exponential learning rate scheduler and fixed the learning rate at 1e-4. As seen below, the model still converges successfully, producing sharp digits by Epoch 10.
+                </p>
+            </div>
+
+            <div class="image-gallery" style="display: flex; justify-content: center; gap: 15px; margin-bottom: 40px;">
+                <figure style="text-align: center; max-width: 30%;">
+                    <img src="imagesb/part2_6_1ns.png" alt="No Scheduler Epoch 1" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">Epoch 1 (No Sched)</figcaption>
+                </figure>
+                <figure style="text-align: center; max-width: 30%;">
+                    <img src="imagesb/part2_6_2ns.png" alt="No Scheduler Epoch 5" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">Epoch 5 (No Sched)</figcaption>
+                </figure>
+                <figure style="text-align: center; max-width: 30%;">
+                    <img src="imagesb/part2_6_3ns.png" alt="No Scheduler Epoch 10" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <figcaption style="margin-top: 10px; font-style: italic; color: #555;">Epoch 10 (No Sched)</figcaption>
+                </figure>
+            </div>
+        </div>
+
+    </div>
+
 </body>
 </html>
